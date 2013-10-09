@@ -40,11 +40,11 @@ module.exports = function(schema, pluginOptions) {
    *
    * @return {Boolean}        If no callback is passed: False if tag already existed; true if added
    */
-  schema.methods.addTag = function(tag, cb) {
-    if (arguments.length == 2) { //tag, cb
-      addTag_async(this, tag, cb);
+  schema.methods.addTag = function(path, tag, cb) {
+    if (arguments.length == 3) { //tag, cb
+      addTag_async(this, path, tag, cb);
     } else { //tag
-      return addTag_sync(this, tag);
+      return addTag_sync(this, path, tag);
     }
   };
 
@@ -62,11 +62,11 @@ module.exports = function(schema, pluginOptions) {
    *
    * @return {Boolean}        If no callback is passed: False if tag didn't exist; true if removed
    */
-  schema.methods.removeTag = function(tag, cb) {
-    if (arguments.length == 2) { //tag, cb
-      removeTag_async(this, tag, cb);
+  schema.methods.removeTag = function(path, tag, cb) {
+    if (arguments.length == 3) { //tag, cb
+      removeTag_async(this, path, tag, cb);
     } else { //tag
-      return removeTag_sync(this, tag);
+      return removeTag_sync(this, path, tag);
     }
   };
 
@@ -78,8 +78,8 @@ module.exports = function(schema, pluginOptions) {
    *
    * @return {Boolean}
    */
-  schema.methods.hasTag = function(tag) {
-    var tags = this[pluginOptions.path];
+  schema.methods.hasTag = function(path, tag) {
+    var tags = this[path];
 
     return _.contains(tags, tag);
   };
@@ -129,10 +129,6 @@ module.exports = function(schema, pluginOptions) {
     return query;
   }
 
-
-
-
-
   //=====================================================================
 
   //PRIVATE FUNCTIONS
@@ -146,8 +142,7 @@ module.exports = function(schema, pluginOptions) {
    * @param {String} tag      The tag to add
    * @param {Function} cb     Callback(err, addedTag)  addedTag will be false if tag already existed; true if added
    */
-  function addTag_async(self, tag, cb) {
-    var path = pluginOptions.path;
+  function addTag_async(self, path, tag, cb) {
 
     //Find the doc  to update if it doesn't have the tag
     var conditions = {};
@@ -180,8 +175,7 @@ module.exports = function(schema, pluginOptions) {
    *
    * @return {Boolean}        False if tag already existed; true if added
    */
-  function addTag_sync(self, tag) {
-    var path = pluginOptions.path;
+  function addTag_sync(self, path, tag) {
 
     var alreadyExists = _.contains(self[path], tag);
 
@@ -205,8 +199,7 @@ module.exports = function(schema, pluginOptions) {
    * @param {String} tag      The tag to add
    * @param {Function} [cb]   Callback(err, removedTag)  removedTag will be false if tag didn't exist; true if removed
    */
-  function removeTag_async(self, tag, cb) {
-    var path = pluginOptions.path;
+  function removeTag_async(self, path, tag, cb) {
 
     //Find the doc  to update if it doesn't have the tag
     var conditions = {};
@@ -239,8 +232,7 @@ module.exports = function(schema, pluginOptions) {
    *
    * @return {Boolean}        False if tag didn't exist; true if removed
    */
-  function removeTag_sync(self, tag) {
-    var path = pluginOptions.path;
+  function removeTag_sync(self, path, tag) {
 
     var alreadyExists = _.contains(self[path], tag);
 

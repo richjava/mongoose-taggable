@@ -30,33 +30,33 @@ mongoose.model('Course', CourseSchema);
 
 ##API
 
-###model.addTag(tag)
+###model.addTag(tag, [path])
 Add a tag (in memory only)
 
 - @param {String} tag     The tag to add
-
+- @param {String} [path]  The property name of the model where the tags will be stored
 - @return {Boolean}       False if tag already existed; true if added
 
 
-###model.addTag(path, tag, cb)
+###model.addTag(tag, [path], [cb])
 Add a tag to a document atomically
 
 NOTE: This method modifies the document on the database
 
-- @param {String} tag    The tag to add
+- @param {String} tag      The tag to add
 - @param {String} [path]   Optional. The property name of the model where the tags will be stored
 - @param {Function} [cb]   Optional. Callback(err, addedTag)  addedTag will be false if tag already existed; true if added
 
 
-###model.removeTag(tag)
+###model.removeTag(tag, [path])
 Remove a tag (in memory only)
 
 - @param {String} tag     The tag to add
-- @param {String} [path]  Optional. The property name of the model where the tags will be stored
+- @param {String} [path]   Optional. The property name of the model where the tags will be stored
 - @return {Boolean}       False if tag didn't exist; true if removed
 
 
-###model.removeTag(tag, cb)
+###model.removeTag(tag, [path], [cb])
 Remove a tag from a document atomically
 
 NOTE: This method modifies the document on the database
@@ -66,7 +66,7 @@ NOTE: This method modifies the document on the database
 - @param {Function} [cb]   Optional. Callback(err, removedTag)  removedTag will be false if tag didn't exist; true if removed
 
 
-###model.hasTag(tag)
+###model.hasTag(tag, [path])
 Returns whether the document as a given tag
 
 - @param {String} tag
@@ -74,7 +74,7 @@ Returns whether the document as a given tag
 - @return {Boolean}
 
 
-###Model.filterByTags(query, includeTags, [excludeTags])
+###Model.filterByTags(query, includeTags, [excludeTags], [path])
 Alters a query to filter by tags.
 
 - @param {Query} query            Mongoose query object

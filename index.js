@@ -48,7 +48,16 @@ module.exports = function (schema, pluginOptions) {
      * @return {Boolean}        If no callback is passed: False if tag already existed; true if added
      */
     schema.methods.addTag = function (tag, path, cb) {
-        path = path || DEFAULT_PATH;
+        if (arguments.length === 2) { // if only two arguments were supplied
+            if (Object.prototype.toString.call(path) == "[object Function]") {
+                cb = path;
+                path = DEFAULT_PATH;
+            } else {
+                path = path || DEFAULT_PATH;
+            }
+        }else{
+            path = path || DEFAULT_PATH;
+        }
         if (cb) {
             addTag_async(this, tag, path, cb);
         } else { //tag
@@ -71,8 +80,17 @@ module.exports = function (schema, pluginOptions) {
      * @return {Boolean}        If no callback is passed: False if tag didn't exist; true if removed
      */
     schema.methods.removeTag = function (tag, path, cb) {
-        path = path || DEFAULT_PATH;
-        if (cb) { //tag, cb
+        if (arguments.length === 2) { // if only two arguments were supplied
+            if (Object.prototype.toString.call(path) == "[object Function]") {
+                cb = path;
+                path = DEFAULT_PATH;
+            } else {
+                path = path || DEFAULT_PATH;
+            }
+        }else{
+            path = path || DEFAULT_PATH;
+        }
+        if (cb) {
             removeTag_async(this, tag, path, cb);
         } else { //tag
             return removeTag_sync(this, path, tag);
@@ -89,7 +107,7 @@ module.exports = function (schema, pluginOptions) {
     schema.methods.hasTag = function (tag, path) {
         path = path || DEFAULT_PATH;
         var tags = this[path];
-        
+
         return _.contains(tags, tag);
     };
 
@@ -105,9 +123,15 @@ module.exports = function (schema, pluginOptions) {
      * @return {Query}
      */
     schema.statics.filterByTags = function (query, includeTags, excludeTags, path) {
-
-        path = path || DEFAULT_PATH;
-
+        if (arguments.length === 3) { // if only three arguments were supplied
+            if (typeof excludeTags === 'string'){
+                path = excludeTags;
+            } else {
+                path = DEFAULT_PATH;
+            }
+        }else{
+            path = path || DEFAULT_PATH;
+        }
         var conditions = [];
 
         //includeTags
